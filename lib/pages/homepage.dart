@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import '../controllers/product.dart';
 import '../model/product.dart';
 import '../util/launch_url.dart';
+import '../routes/route-name.dart';
 
 class HomePage extends StatelessWidget {
   final ProductController _productController = Get.put(ProductController());
@@ -16,12 +17,12 @@ class HomePage extends StatelessWidget {
           children: [
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
-              child: const Row(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(
-                    'Hi, Bestiee',
+                  const Text(
+                    'Hi, Bestie Bima',
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 16,
@@ -29,7 +30,16 @@ class HomePage extends StatelessWidget {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  Icon(Icons.people), // Replace with your desired icon
+                  IconButton(
+                    onPressed: () {
+                      Get.toNamed(RouteName.page_about_us);
+                    },
+                    icon: const Icon(Icons.people_alt_outlined),
+                    color: Colors.black,
+                    iconSize: 24,
+                    splashRadius: 24,
+                    tooltip: 'About Us',
+                  ),
                 ],
               ),
             ),
@@ -125,37 +135,45 @@ class HomePage extends StatelessWidget {
               child: Container(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const Text(
-                      'Products',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    Expanded(
-                      child: GridView.builder(
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 16,
-                          mainAxisSpacing: 16,
+                child: Obx(() {
+                  if (_productController.productLoading.value) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else {
+                    List<Product> products = _productController.getProduct;
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        const Text(
+                          'Products',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
-                        itemCount: _productController.getProduct.length,
-                        itemBuilder: (context, index) {
-                          Product product =
-                              _productController.getProduct[index];
-                          return _buildProductCard(product);
-                        },
-                      ),
-                    ),
-                  ],
-                ),
+                        const SizedBox(height: 16),
+                        Expanded(
+                          child: GridView.builder(
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 16,
+                              mainAxisSpacing: 16,
+                            ),
+                            itemCount: products.length,
+                            itemBuilder: (context, index) {
+                              Product product = products[index];
+                              return _buildProductCard(product);
+                            },
+                          ),
+                        ),
+                      ],
+                    );
+                  }
+                }),
               ),
             ),
           ],
@@ -163,8 +181,7 @@ class HomePage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          _productController
-              .callGetMethod(); // Perbaikan disini, memanggil fungsi callGetMethod
+          Get.toNamed(RouteName.page_cart);
         },
         child: const Icon(Icons.shopping_cart_outlined),
       ),
@@ -181,14 +198,18 @@ class HomePage extends StatelessWidget {
           width: 168.18,
           height: 125,
           decoration: ShapeDecoration(
-            image: DecorationImage(
-              image: CachedNetworkImageProvider(product.image,
-                  errorListener: () {}),
-              fit: BoxFit.cover,
-            ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
             ),
+          ),
+          child: FadeInImage(
+            placeholder: const AssetImage('assets/images/placeholder.png'),
+            image: CachedNetworkImageProvider(product.image),
+            fit: BoxFit.cover,
+            imageErrorBuilder: (context, error, stackTrace) {
+              // Tampilkan placeholder atau gambar error jika terjadi kesalahan
+              return Image.asset('assets/images/error_sync.png');
+            },
           ),
         ),
         const SizedBox(height: 5),
