@@ -7,14 +7,15 @@ class Services {
   Future<List<Product>?> getAllProduct() async {
     try {
       var response = await http
-      .get(Uri.parse("https://v2.api.sibabe.app/customer/products"))
-      .timeout(const Duration(seconds: 15), onTimeout: (){
+          .get(Uri.parse("https://v2.api.sibabe.app/customer/products"))
+          .timeout(const Duration(seconds: 15), onTimeout: () {
         throw TimeoutException("Connection time out, try again later");
       });
 
       if (response.statusCode == 200) {
-        List jsonResponse = convert.jsonDecode(response.body);
-        return jsonResponse.map((e) => new Product.fromJson(e)).toList();
+        Map<String, dynamic> jsonResponse = convert.jsonDecode(response.body);
+        List<dynamic> productsData = jsonResponse["data"];
+        return productsData.map((e) => Product.fromJson(e)).toList();
       } else {
         return null;
       }

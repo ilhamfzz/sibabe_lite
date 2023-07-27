@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'pages/splash-screen.dart';
+import 'package:get/get.dart';
+import 'routes/page-routes.dart';
+import 'pages/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
@@ -14,7 +16,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
+      debugShowCheckedModeBanner: false, // Remove debug banner
       title: 'Flutter Demo',
       theme: ThemeData(
         // This is the theme of your application.
@@ -36,6 +39,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: const SplashScreen(),
+      getPages: PageRouteApp.page,
     );
   }
 }

@@ -1,4 +1,4 @@
-import '../pages/splash-screen.dart';
+import '../pages/splash_screen.dart';
 import '../pages/login.dart';
 import '../pages/homepage.dart';
 import 'route-name.dart';
@@ -16,7 +16,7 @@ class PageRouteApp {
     ),
     GetPage(
       name: RouteName.page_homepage,
-      page: () => const HomePage()
+      page: () => HomePage()
     ),
   ];
 }
