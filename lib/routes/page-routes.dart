@@ -2,6 +2,7 @@ import '../pages/splash_screen.dart';
 import '../pages/login.dart';
 import '../pages/homepage.dart';
 import '../pages/cart.dart';
+import '../pages/about_us.dart';
 import 'route-name.dart';
 import 'package:get/get.dart';
 
@@ -22,6 +23,10 @@ class PageRouteApp {
     GetPage(
       name: RouteName.page_cart,
       page: () => const CartPage()
+    ),
+    GetPage(
+      name: RouteName.page_about_us,
+      page: () => AboutUsPage()
     ),
   ];
 }
