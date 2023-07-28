@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import '../model/product.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
@@ -15,6 +16,9 @@ class Services {
       if (response.statusCode == 200) {
         Map<String, dynamic> jsonResponse = convert.jsonDecode(response.body);
         List<dynamic> productsData = jsonResponse["data"];
+        for (var i = 0; i < productsData.length; i++) {
+          CachedNetworkImageProvider(productsData[i]["image"]);
+        }
         return productsData.map((e) => Product.fromJson(e)).toList();
       } else {
         return null;
