@@ -41,7 +41,7 @@ class AboutUsPage extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             const Text(
-              'Sibabe is an acronym for Sistem Informasi Bima Bakery, which is an Information System for Bima Bakery. Sibabe was initially released in 2022 with the purpose of completing the final project of the Software Project Management course. Now, I, Moh. Ilham Fakhri Zamzami, an active student at Institut Teknologi Sepuluh Nopember, have launched a smartphone application for Sibabe as part of my final project in Sanbercode Flutter Bootcamp Batch 47.',
+              'Sibabe is an acronym for Sistem Informasi Bima Bakery, which is an Information System for Bima Bakery. Sibabe was initially released in 2022 with the purpose of completing the final project of the Software Project Management course. Now, I, Moh. Ilham Fakhri Zamzami, an active student at Institut Teknologi Sepuluh Nopember, have launched a smartphone application for sibabe as part of my final project in Sanbercode Flutter Bootcamp Batch 47.',
               style: TextStyle(fontSize: 16),
               textAlign: TextAlign.justify,
             ),

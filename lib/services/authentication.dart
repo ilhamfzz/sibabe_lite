@@ -17,4 +17,20 @@ class AuthenticationService {
   }
 
   // Add other authentication methods as needed (e.g., registration, logout, etc.)
+  Future<bool> registerWithEmailPassword(String email, String password) async {
+    try {
+      final UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return userCredential.user != null;
+    } catch (e) {
+      print('Error during registration: $e');
+      return false;
+    }
+  }
+
+  Future<void> logout() async {
+    await _auth.signOut();
+  }
 }

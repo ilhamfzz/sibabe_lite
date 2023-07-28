@@ -4,15 +4,15 @@ import '../routes/route-name.dart';
 import '../controllers/auth.dart';
 import 'package:get/get.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({Key? key}) : super(key: key);
 
   @override
   // ignore: library_private_types_in_public_api
-  _LoginPageState createState() => _LoginPageState();
+  _RegisterPageState createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final AuthController _authController = AuthController();
@@ -32,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const Text(
-                  'Login',
+                  'Register',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.black,
@@ -43,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: 16),
                 const Text(
-                  'Welcome',
+                  'Create Your Account',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.black,
@@ -54,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: 4),
                 const Text(
-                  'Please enter your account here',
+                  'Please fill in the required fields below',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.black,
@@ -138,8 +138,12 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 12),
                 ElevatedButton(
                   onPressed: () {
-                    // Memanggil fungsi untuk login dengan menggunakan email dan password
-                    _handleLogin();
+                    setState(() {
+                      _emailController.text.isEmpty ? _isEmailEmpty = true : _isEmailEmpty = false;
+                      _passwordController.text.isEmpty ? _isPasswordEmpty = true : _isPasswordEmpty = false;
+                    });
+                    // Memanggil fungsi untuk registrasi dengan menggunakan email dan password
+                    _handleRegistration();
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFD6AD60),
@@ -149,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
                     elevation: 4,
                   ),
                   child: const Text(
-                    'Login',
+                    'Register',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 16,
@@ -163,7 +167,7 @@ class _LoginPageState extends State<LoginPage> {
                   TextSpan(
                     children: [
                       const TextSpan(
-                        text: "Don't you have an account? ",
+                        text: 'Already have an account? ',
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 12,
@@ -171,20 +175,17 @@ class _LoginPageState extends State<LoginPage> {
                           fontWeight: FontWeight.w400,
                         ),
                       ),
-                      // buat text yang bisa diklik
                       TextSpan(
-                        text: ' Register',
+                        text: ' Login',
                         style: const TextStyle(
                           color: Color(0xFFD6AD60),
                           fontSize: 12,
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w600,
                         ),
-                        // ketika text diklik
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
-                            // navigasi ke halaman register
-                            Get.toNamed(RouteName.page_register);
+                            Get.toNamed(RouteName.page_login);
                           },
                       ),
                     ],
@@ -199,24 +200,40 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void _handleLogin() async {
+  void _handleRegistration() async {
     String email = _emailController.text.trim();
     String password = _passwordController.text.trim();
 
     if (email.isNotEmpty && password.isNotEmpty) {
-      bool loginSuccess = await _authController.loginWithEmailPassword(email, password);
+      bool registrationSuccess = await _authController.registerWithEmailPassword(email, password);
 
-      if (loginSuccess) {
-        // Jika login berhasil, navigasi ke halaman home
-        Get.toNamed(RouteName.page_homepage);
-      } else {
-        // Jika login gagal, tampilkan pesan kesalahan
+      if (registrationSuccess) {
+        // Jika registrasi berhasil, tampilkan pesan sukses dan navigasi ke halaman login
         // ignore: use_build_context_synchronously
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: const Text('Login Failed'),
-            content: const Text('Invalid email or password. Please try again.'),
+            title: const Text('Registration Success'),
+            content: const Text('Your account has been successfully registered.'),
+            actions: [
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  Get.toNamed(RouteName.page_login);
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+      } else {
+        // Jika registrasi gagal, tampilkan pesan kesalahan
+        // ignore: use_build_context_synchronously
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Registration Failed'),
+            content: const Text('Failed to register your account. Please try again.'),
             actions: [
               ElevatedButton(
                 onPressed: () => Navigator.pop(context),
@@ -226,11 +243,6 @@ class _LoginPageState extends State<LoginPage> {
           ),
         );
       }
-    } else {
-      setState(() {
-        _isEmailEmpty = email.isEmpty;
-        _isPasswordEmpty = password.isEmpty;
-      });
     }
   }
 }

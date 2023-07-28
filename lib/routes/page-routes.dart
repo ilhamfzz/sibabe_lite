@@ -3,6 +3,7 @@ import '../pages/login.dart';
 import '../pages/homepage.dart';
 import '../pages/cart.dart';
 import '../pages/about_us.dart';
+import '../pages/register.dart';
 import 'route-name.dart';
 import 'package:get/get.dart';
 
@@ -17,6 +18,10 @@ class PageRouteApp {
       page: () => const LoginPage()
     ),
     GetPage(
+      name: RouteName.page_register,
+      page: () => const RegisterPage()
+    ),
+    GetPage(
       name: RouteName.page_homepage,
       page: () => HomePage()
     ),
@@ -26,7 +31,7 @@ class PageRouteApp {
     ),
     GetPage(
       name: RouteName.page_about_us,
-      page: () => AboutUsPage()
+      page: () => const AboutUsPage()
     ),
   ];
 }
