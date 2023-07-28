@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'routes/page-routes.dart';
 import 'pages/splash_screen.dart';
+import 'controllers/product.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  final ProductController productController = Get.put(ProductController());
+  await productController.callGetMethod();
   runApp(const MyApp());
 }
 

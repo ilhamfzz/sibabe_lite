@@ -7,7 +7,7 @@ import '../util/launch_url.dart';
 import '../routes/route-name.dart';
 
 class HomePage extends StatelessWidget {
-  final ProductController _productController = Get.put(ProductController());
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -136,12 +136,13 @@ class HomePage extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
                 child: Obx(() {
-                  if (_productController.productLoading.value) {
+                  final ProductController productController = Get.find<ProductController>();
+                  if (productController.productLoading.value) {
                     return const Center(
                       child: CircularProgressIndicator(),
                     );
                   } else {
-                    List<Product> products = _productController.getProduct;
+                    List<Product> products = productController.getProduct;
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
